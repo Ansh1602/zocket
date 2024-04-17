@@ -33,3 +33,19 @@ code {
   font-weight: bold;
   margin-right: 5px;
 }
+
+.banner {
+  font-size: 20px;
+}
+
+.ad-customization {
+  font: 40px "Helvetica Neue" bold;
+}
+
+input {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  border: 2px solid lightgray;
+  border-radius: 10px;
+  padding: 10px 10px 10px 30px;
+}
+

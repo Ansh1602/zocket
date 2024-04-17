@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { SketchPicker } from "react-color";
-import CanvasComponent from './Canvas';
 import qq from './qq.jpeg';
 const MASK = 'https://d273i1jagfl543.cloudfront.net/templates/global_temp_landscape_temp_10_mask.png?random=12345';
 const STROKE = 'https://d273i1jagfl543.cloudfront.net/templates/global_temp_landscape_temp_10_Mask_stroke.png';
@@ -9,13 +8,13 @@ const DESIGN = 'https://d273i1jagfl543.cloudfront.net/templates/global_temp_land
 
 
 const Ad = () => {
-
   const [image, setImage] = useState(qq);
   const [captionT, setCaptionT] = useState('1 & 2 BHK Luxury Apartments at just Rs.34.97 Lakhs')
   const [ctaT, setCtaT] = useState('Shop Now')
   const canvasRef = useRef(null);
   const imageRef = useRef(null);
   const captionRef = useRef(null);
+  const ctaRef = useRef(null);
 
   const [showPicker, setShowPicker] = useState(false);
   const [lastPickedColors, setLastPickedColors] = useState([]);
@@ -30,9 +29,6 @@ const Ad = () => {
     setShowPicker(!showPicker);
   };
 
-  const handleColorSelect = (color) => {
-    setSelectedColor(color.hex);
-  };
 
   const handleOutsideClick = (event) => {
     if (pickerRef.current && !pickerRef.current.contains(event.target)) {
@@ -62,18 +58,29 @@ const Ad = () => {
   }
 
   const handleButtonClick = (e) => {
-    setCaptionT(captionRef.current.value);
+    if(captionRef.current.value){
+      setCaptionT(captionRef.current.value);
+      captionRef.current.value = ""
+    }
+
+    if(ctaRef.current.value){
+      setCtaT(ctaRef.current.value);
+      ctaRef.current.value = "";
+    }
     // console.log(caption);
   }
 
   useEffect(() => {
+
+    
+
     // Add event listener for clicks outside the color picker popover
     document.addEventListener('mousedown', handleOutsideClick);
     return () => {
       // Cleanup
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [selectedColor]); // Re-run effect when selectedColor changes
+  }, [selectedColor,]); // Re-run effect when selectedColor changes
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -122,7 +129,7 @@ const Ad = () => {
     // For the main caption text
     function drawCaption(ctx) {
       const caption = {
-        text: "1 & 2 BHK Luxury Apartments at just Rs.34.97 Lakhs",
+        text: captionT,
         position: { x: 100, y: 50 },
         maxCharactersPerLine: 31,
         fontSize: 47,
@@ -163,13 +170,13 @@ const Ad = () => {
 
     function drawCTA(ctx) {
       const cta = {
-        text: "Shop Now",
+        text: ctaT,
         position: { x: 100, y: 200 },
         textColor: "#FFFFFF",
         backgroundColor: "#000000"
       };
 
-      const { text, position, fontSize = 40, textColor, backgroundColor, wrapLength = 20, padding = 30 } = cta;
+      const { text, position, fontSize = 40, textColor, backgroundColor, padding = 30 } = cta;
 
       // Measure text width
       ctx.font = `${fontSize}px Arial`;
@@ -206,48 +213,50 @@ const Ad = () => {
     // Draw the CTA
     drawCTA(ctx);
 
-  }, [selectedColor, image, captionT]);
+  }, [selectedColor, image, captionT, ctaT]);
 
 
 
   return (
-    <div>
-      <div className="d-flex my-5 text-center" >
+    <div className='container'>
+      <div className="d-flex my-5 text-center " >
         <div className="p-2 flex-fill"><canvas ref={canvasRef}
           width={1080}
           height={1080}
-          style={{ width: '400px', height: '400px' }} /></div>
-        {/* <div className="p-2 flex-fill">
+          style={{ width: '400px', height: '400px' }} />
+        </div>
 
-          <CanvasComponent imageUrl={image} />
-
-        </div> */}
 
         <div className="p-2 flex-fill justify-content-center " >
 
-          <h1 style={{ textAlign: 'center' }}>Ad Customization </h1>
-          <h5>Customise your ad and get the template accordinly </h5>
+          <h2 className="ad-customization text-center">Ad Customization </h2>
+          <h5 className="lead banner">Customise your ad and get the template accordinly </h5>
 
-          <div className='my-5'>
+          <div className='container my-3 d-flex flex-column mb-3'>
             <input ref={imageRef} type="file" onChange={handleImageChange} />
+            <label style={{fontSize: 'small'}} for="floatingTextarea">Select Background</label>
             <hr />
           </div>
 
-          <div className="input-group ">
-            <span className="input-group-text" id="inputGroup-sizing-default">Ad Content</span>
-            <input type="text" ref={captionRef} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+          <div className="container">
+            <div className="input-group ">
+              <span className="input-group-text" id="inputGroup-sizing-default">Ad Content</span>
+              <input type="text" ref={captionRef} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+            </div>
+
+            <div className="input-group my-4">
+              <span className="input-group-text" id="inputGroup-sizing-default">CTA</span>
+              <input type="text" ref={ctaRef} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
+            </div>
           </div>
 
-          
 
 
-          <div className="input-group ">
-            <span className="input-group-text" id="inputGroup-sizing-default">Ad Content</span>
-            <input type="text" ref={captionRef} className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-          </div>
 
-          <div className='my-4 align-center'>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+
+
+          <div className='my-4 justify-content-center align-center flex '>
+            <div className='justify-content-center ' style={{ display: 'flex', alignItems: 'center' }}>
               {lastPickedColors.map((color, index) => (
                 <div
                   key={index}
@@ -262,17 +271,20 @@ const Ad = () => {
                   onClick={() => handlePreviousColorClick(color)}
                 />
               ))}
-              <button onClick={togglePicker}>+</button>
+              <button style={{borderRadius: '50%'}} onClick={togglePicker}>+</button>
             </div>
+              <label style={{fontSize: 'small'}} for="floatingTextarea">Select Background</label>
             {showPicker && (
               <div ref={pickerRef} style={{ position: 'absolute', zIndex: '1' }}>
                 <SketchPicker color={selectedColor} onChange={handleColorChange} />
+                
+                
               </div>
             )}
           </div>
 
           <div>
-            <button type="button" className="btn btn-primary" onClick={handleButtonClick}>Primary</button>
+            <button type="button" className="btn btn-outline-success" onClick={handleButtonClick}>Update</button>
           </div>
 
         </div>
