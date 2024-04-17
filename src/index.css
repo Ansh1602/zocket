@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.text-with-arrow {
+  display: flex;
+  align-items: center;
+}
+
+.text-with-arrow input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.text-with-arrow .arrow {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 5px;
+}
